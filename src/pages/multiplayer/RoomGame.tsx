@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRoom } from '../../lib/useRoom';
 import { useRoomSession } from '../../lib/useRoomSession';
 import { useBingoGame } from '../../lib/useBingoGame';
+import { useLiveGameControl } from '../../lib/useLiveGameControl';
 import { BingoCard } from '../../components/BingoCard';
 import { GameLayout } from '../../components/GameLayout';
 import { RosterPanel } from '../../components/RosterPanel';
@@ -19,8 +21,25 @@ export function RoomGame() {
 
 function RoomGameReady({ code }: { code: string }) {
   const navigate = useNavigate();
-  const { room, me, isCaller, players, calledPending, toggleCell, leave } = useRoom(code);
+  const { room, me, isHost, isCaller, players, calledPending, toggleCell, leave, followGame, unfollowGame } =
+    useRoom(code);
   const derived = useBingoGame(me?.marked ?? [], me?.size ?? 5);
+  const { element: liveGameSection, feed } = useLiveGameControl({
+    isHost,
+    mlbGamePk: room?.mlbGamePk ?? null,
+    mlbGameLabel: room?.mlbGameLabel ?? null,
+    onFollow: followGame,
+    onUnfollow: unfollowGame,
+  });
+
+  const detectedPending = useMemo(() => {
+    if (!me) return new Set<number>();
+    const pending = new Set<number>(calledPending);
+    me.card.forEach((event, i) => {
+      if (!event.free && feed.detectedAbbrs.has(event.abbr) && !me.marked[i]) pending.add(i);
+    });
+    return pending;
+  }, [me, calledPending, feed.detectedAbbrs]);
 
   if (!room || !me) return <CenteredNote text="Loading game…" />;
   if (room.status === 'waiting') return <Navigate to={`/room/${code}/lobby`} replace />;
@@ -60,11 +79,16 @@ function RoomGameReady({ code }: { code: string }) {
             card={me.card}
             marked={me.marked}
             winning={derived.winning}
-            called={calledPending}
+            called={detectedPending}
             onToggle={toggleCell}
           />
         }
-        sidebar={<RosterPanel players={players} meId={me.id} hostId={room.hostId} size={me.size} />}
+        sidebar={
+          <div className="flex flex-col gap-4">
+            <RosterPanel players={players} meId={me.id} hostId={room.hostId} size={me.size} />
+            {liveGameSection}
+          </div>
+        }
       />
       <AnnouncementBanner players={players} meId={me.id} />
     </>

@@ -27,6 +27,8 @@ type RoomRow = {
   called_events: string[] | null;
   started_at: number | null;
   ended_at: number | null;
+  mlb_game_pk: number | null;
+  mlb_game_label: string | null;
 };
 
 type PlayerRow = {
@@ -82,6 +84,8 @@ function assembleRoom(roomRow: RoomRow, playerRows: PlayerRow[]): Room {
     calledEvents: roomRow.called_events ?? [],
     startedAt: roomRow.started_at,
     endedAt: roomRow.ended_at,
+    mlbGamePk: roomRow.mlb_game_pk,
+    mlbGameLabel: roomRow.mlb_game_label,
   };
 }
 
@@ -114,6 +118,8 @@ export async function createRoom(args: {
     called_events: [],
     started_at: null,
     ended_at: null,
+    mlb_game_pk: null,
+    mlb_game_label: null,
   });
   if (roomErr) throw roomErr;
   const { error: playerErr } = await db.from('players').insert(playerToRow(host, roomCode));
@@ -175,6 +181,19 @@ export async function setCalledEvents(roomCode: string, calledEvents: string[]):
   const { error } = await client()
     .from('rooms')
     .update({ called_events: calledEvents })
+    .eq('room_code', roomCode);
+  if (error) throw error;
+}
+
+/** Host attaches (or clears, with gamePk null) an MLB game for the room to follow. */
+export async function setLiveGame(
+  roomCode: string,
+  gamePk: number | null,
+  label: string | null
+): Promise<void> {
+  const { error } = await client()
+    .from('rooms')
+    .update({ mlb_game_pk: gamePk, mlb_game_label: label })
     .eq('room_code', roomCode);
   if (error) throw error;
 }

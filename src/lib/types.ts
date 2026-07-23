@@ -30,6 +30,9 @@ export type Room = {
   calledEvents: string[];
   startedAt: number | null;
   endedAt: number | null;
+  /** Milestone 3: MLB game this room is following, if any (host-controlled). */
+  mlbGamePk: number | null;
+  mlbGameLabel: string | null;
 };
 
 export const MAX_PLAYERS = 8;

@@ -1,6 +1,7 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRoom } from '../../lib/useRoom';
 import { useRoomSession } from '../../lib/useRoomSession';
+import { useLiveGameControl } from '../../lib/useLiveGameControl';
 import { ALL_EVENTS } from '../../lib/events';
 import { GameLayout } from '../../components/GameLayout';
 import { RosterPanel } from '../../components/RosterPanel';
@@ -18,7 +19,15 @@ export function Caller() {
 
 function CallerReady({ code }: { code: string }) {
   const navigate = useNavigate();
-  const { room, me, isCaller, players, callEvent, leave } = useRoom(code);
+  const { room, me, isHost, isCaller, players, callEvent, leave, followGame, unfollowGame } =
+    useRoom(code);
+  const { element: liveGameSection, feed } = useLiveGameControl({
+    isHost,
+    mlbGamePk: room?.mlbGamePk ?? null,
+    mlbGameLabel: room?.mlbGameLabel ?? null,
+    onFollow: followGame,
+    onUnfollow: unfollowGame,
+  });
 
   if (!room || !me) return <CenteredNote text="Loading game…" />;
   if (room.status === 'waiting') return <Navigate to={`/room/${code}/lobby`} replace />;
@@ -56,6 +65,7 @@ function CallerReady({ code }: { code: string }) {
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {ALL_EVENTS.map((event) => {
               const isCalled = called.has(event.abbr);
+              const autoDetected = feed.detectedAbbrs.has(event.abbr);
               return (
                 <button
                   key={event.abbr}
@@ -63,20 +73,32 @@ function CallerReady({ code }: { code: string }) {
                   onClick={() => callEvent(event.abbr)}
                   aria-pressed={isCalled}
                   className={[
-                    'flex flex-col items-start gap-0.5 rounded-lg border-2 px-3 py-2.5 text-left transition-colors',
+                    'relative flex flex-col items-start gap-0.5 rounded-lg border-2 px-3 py-2.5 text-left transition-colors',
                     isCalled
                       ? 'border-gold-bright bg-gold text-navy-dark'
-                      : 'border-navy-light/25 bg-white text-navy-dark hover:bg-navy/5',
+                      : autoDetected
+                        ? 'border-navy-light/40 border-dashed bg-navy/5 text-navy-dark'
+                        : 'border-navy-light/25 bg-white text-navy-dark hover:bg-navy/5',
                   ].join(' ')}
                 >
                   <span className="font-condensed text-sm font-semibold">{event.abbr}</span>
                   <span className="text-xs opacity-70">{event.label}</span>
+                  {!isCalled && autoDetected && (
+                    <span className="absolute top-1 right-1 text-[8px] font-bold tracking-wide text-navy-dark/50 uppercase">
+                      auto
+                    </span>
+                  )}
                 </button>
               );
             })}
           </div>
         }
-        sidebar={<RosterPanel players={players} meId={me.id} hostId={room.hostId} size={me.size} />}
+        sidebar={
+          <div className="flex flex-col gap-4">
+            <RosterPanel players={players} meId={me.id} hostId={room.hostId} size={me.size} />
+            {liveGameSection}
+          </div>
+        }
       />
       <AnnouncementBanner players={players} meId={me.id} />
     </>

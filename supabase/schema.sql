@@ -22,12 +22,14 @@ create table if not exists public.rooms (
   called_events jsonb not null default '[]'::jsonb,
   started_at    bigint,
   ended_at      bigint,
+  mlb_game_pk   bigint,                            -- Milestone 3: MLB gamePk this room follows
+  mlb_game_label text,
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()
 );
 
 create table if not exists public.players (
-  id           text primary key,
+  id           text not null,            -- device-persistent playerId; unique per room, not globally
   room_code    text not null references public.rooms(room_code) on delete cascade,
   name         text not null,
   card         jsonb not null,           -- size*size event objects
@@ -35,7 +37,8 @@ create table if not exists public.players (
   has_bingo    boolean not null default false,
   has_blackout boolean not null default false,
   is_caller    boolean not null default false,
-  joined_at    bigint not null
+  joined_at    bigint not null,
+  primary key (id, room_code)
 );
 
 create index if not exists players_room_code_idx on public.players (room_code);

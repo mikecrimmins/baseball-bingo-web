@@ -10,8 +10,8 @@ independent codebases, including separate Supabase projects.
 
 ## Status
 
-**Milestones 1 (solo play) and 2 (multiplayer rooms) — done.** Live MLB game
-assist (Milestone 3) is not built yet.
+**All three milestones are done**: solo play, multiplayer rooms, and live
+MLB game assist.
 
 ## Features so far
 
@@ -34,9 +34,14 @@ assist (Milestone 3) is not built yet.
   Refreshing mid-game restores your card, marks, and room via a
   browser-local player id — no re-entering your name.
   Rooms expire a few hours after their last activity (hourly cleanup job).
-- Responsive: desktop/tablet layout reserves a right-hand sidebar column for
-  the live event feed (Milestone 3) — currently used for the roster panel;
-  phones stack to a single column.
+- **Live game assist**: attach today's actual MLB game (solo, or room-wide —
+  the host attaches it and everyone sees the same feed) and the sidebar
+  becomes a live score/inning/recent-plays panel, polling the free MLB Stats
+  API every 15s. When the feed detects an event matching a square, that cell
+  pulses the same "confirm to mark?" prompt as caller mode — never a silent
+  auto-mark. Not every square is detectable from the feed (see
+  `mlbEventMapping.ts`); those stay manual-only, and the game is always fully
+  playable by hand if the feed is slow or unavailable.
 - Installable as a PWA (manifest + service worker) so tablets can add it to
   the home screen and tolerate brief connection drops.
 
@@ -51,8 +56,8 @@ npm install
 npm run dev
 ```
 
-Open the printed local URL. Solo play works with no configuration; see below
-to enable multiplayer.
+Open the printed local URL. Solo play — including the live MLB feed — works
+with no configuration; see below to enable multiplayer.
 
 ## Multiplayer setup (Supabase)
 
@@ -65,6 +70,15 @@ the Host/Join screens show a friendly setup notice instead of crashing.
    `rooms` and `players` tables, enables Realtime on both, adds permissive RLS
    policies for the anonymous role (no login — room codes only), and schedules
    an hourly job to delete rooms inactive for 6+ hours.
+
+   If you set up multiplayer before Milestone 3, you already have this table
+   and only need the new bits — run the files in
+   [`supabase/migrations/`](supabase/migrations/) in order instead of the
+   full schema. `0003_players_composite_key.sql` in particular fixes a real
+   bug: the `players` table's primary key was `id` alone (a device-persistent
+   id), so the same browser could never host or join a *second* room without
+   leaving the first — worth applying even if you don't care about live game
+   assist.
 3. In **Project Settings → API**, copy the **Project URL** and the
    **`anon`/`public`** key (or **publishable** key, in newer dashboards —
    same thing, safe to ship in a client app). Never use the **`service_role`**
@@ -96,7 +110,8 @@ change:
 Room {
   roomCode, status, hostId, callerMode, size,
   players: { [id]: { name, card[size*size], marked[size*size], hasBingo, hasBlackout, isCaller } },
-  calledEvents: string[],   // caller mode only
+  calledEvents: string[],           // caller mode
+  mlbGamePk, mlbGameLabel,          // live game assist, host-controlled
   startedAt, endedAt,
 }
 ```
@@ -105,12 +120,28 @@ The sync layer is isolated in [`src/lib/roomSync.ts`](src/lib/roomSync.ts) —
 swap it for another backend without touching the UI. Room membership persists
 via a `playerId` generated once per browser and stored in `localStorage` (see
 [`src/store/roomStore.ts`](src/store/roomStore.ts)) — that id, plus the room
-code already in the URL, is what makes a refresh restore your session.
+code already in the URL, is what makes a refresh restore your session. A
+player's row is unique per `(id, room_code)`, not globally, so the same
+browser can be in many rooms over its lifetime.
+
+### MLB Stats API
+
+Free, unauthenticated, no key — see [`src/lib/mlbApi.ts`](src/lib/mlbApi.ts).
+MLB's terms limit it to individual/non-commercial/non-bulk use, which this
+is. The event-type → bingo-square mapping in
+[`src/lib/mlbEventMapping.ts`](src/lib/mlbEventMapping.ts) is verified
+against the API's own canonical list (`/v1/eventTypes`) plus real sampled
+games, not guessed — see that file's comments for exactly which squares are
+detectable and which stay manual (things like inside-the-park-HR-vs-regular
+or pinch-hit-vs-pinch-run aren't distinguishable in the feed at this level of
+detail). [`src/lib/useLiveGame.ts`](src/lib/useLiveGame.ts) polls every 15s
+and degrades silently on any fetch failure — manual play is never blocked by
+the API being slow or down.
 
 ## Testing
 
-Game logic (card generation, win/blackout detection, roster progress) has
-unit tests:
+Game logic (card generation, win/blackout detection, roster progress, MLB
+event mapping) has unit tests:
 
 ```bash
 npm test
@@ -129,16 +160,18 @@ src/
   lib/            events, cardGen, bingoDetect, useBingoGame, roomCode, types
                   (pure TS, no DOM — portable to a future native build)
   lib/            supabase, roomSync, useRoom, useRoomSession — multiplayer
+  lib/            mlbApi, mlbEventMapping, useLiveGame, useLiveGameControl
   lib/__tests__/  vitest unit tests
   store/          gameStore (solo), roomStore (multiplayer device identity)
   components/     BingoCard, BingoCell, WinBanner, GameLayout,
-                  RosterPanel, AnnouncementBanner
+                  RosterPanel, AnnouncementBanner, GamePicker, LiveFeedPanel
   pages/          Landing, SoloGame
   pages/multiplayer/  HostRoom, JoinRoom, Lobby, RoomGame, Caller
 public/
   manifest.webmanifest, sw.js, icons/, favicon.svg   PWA assets
 supabase/
   schema.sql      rooms/players tables, realtime, RLS, expiry cleanup
+  migrations/     incremental changes for already-running projects
 ```
 
 App icons and favicon come from a designer-drawn mark, recolored to the app's
@@ -155,14 +188,9 @@ Android's maskable crop.
 
 Deployed on [Vercel](https://vercel.com), connected to this repo's `master`
 branch — every `git push` triggers a new deploy. Build command `npm run
-build`, output directory `dist`. Needs the two `VITE_SUPABASE_*` environment
-variables (above) for multiplayer; solo play works without them.
+build`, output directory `dist`, `vercel.json` has the SPA rewrite client-side
+routes need. Needs the two `VITE_SUPABASE_*` environment variables (above)
+for multiplayer; solo play (including live game assist) works without them.
 
 To set up your own instance: import the repo in the Vercel dashboard (or
 `vercel link` + `vercel --prod`), add the environment variables, redeploy.
-
-## Roadmap
-
-- **Milestone 3** — live game assist via the MLB Stats API, filling the
-  reserved sidebar with a play-by-play feed and confirm-to-mark prompts (the
-  same interaction pattern the caller's called-events already use).

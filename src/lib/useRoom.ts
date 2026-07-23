@@ -189,6 +189,26 @@ export function useRoom(roomCode: string | null) {
     await sync.endGame(roomCode, Date.now());
   }, [roomCode]);
 
+  /** Host attaches an MLB game for the whole room to follow. */
+  const followGame = useCallback(
+    async (gamePk: number, label: string) => {
+      const store = useRoomStore.getState();
+      const r = store.room;
+      if (!r || !roomCode) return;
+      store.setRoom({ ...r, mlbGamePk: gamePk, mlbGameLabel: label }); // optimistic
+      await sync.setLiveGame(roomCode, gamePk, label);
+    },
+    [roomCode]
+  );
+
+  const unfollowGame = useCallback(async () => {
+    const store = useRoomStore.getState();
+    const r = store.room;
+    if (!r || !roomCode) return;
+    store.setRoom({ ...r, mlbGamePk: null, mlbGameLabel: null }); // optimistic
+    await sync.setLiveGame(roomCode, null, null);
+  }, [roomCode]);
+
   const leave = useCallback(async () => {
     const store = useRoomStore.getState();
     try {
@@ -230,5 +250,7 @@ export function useRoom(roomCode: string | null) {
     callEvent,
     end,
     leave,
+    followGame,
+    unfollowGame,
   };
 }
