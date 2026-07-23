@@ -47,7 +47,7 @@ export const ALL_EVENTS: BingoEvent[] = [
   { abbr: 'VDO', label: 'Video review' },
   { abbr: 'CI', label: "Catcher's int." },
   { abbr: 'FO', label: 'Foul out' },
-  { abbr: 'KKK', label: "3 K's in a row" },
+  { abbr: "3 K's", label: '3 strikeouts in a row' },
   { abbr: 'MND', label: 'Mound visit' },
   { abbr: 'DLY', label: 'Rain delay' },
   { abbr: 'BUNT', label: 'Bunt single' },
