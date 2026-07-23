@@ -7,7 +7,7 @@ import sharp from 'sharp';
 import { writeFileSync } from 'node:fs';
 
 const COLORS = {
-  bg: '#F4F7FC', // app cream (matches --color-cream)
+  bg: '#FFFFFF',
   ring: '#16305C', // app navy (matches --color-navy)
   ball: '#FFFFFF',
   ballStroke: 'rgba(22,48,92,0.28)',
