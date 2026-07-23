@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { ALL_EVENTS, FREE } from '../events';
 import { generateCard, freshMarked, shuffle, freeIndex } from '../cardGen';
-import { bingoLines, checkBingo, checkBlackout, winningCells, markedCount, completedLines } from '../bingoDetect';
+import { bingoLines, checkBingo, checkBlackout, winningCells, markedCount, completedLines, closestLineNeed } from '../bingoDetect';
 import { generateRoomCode } from '../roomCode';
 import type { CardSize } from '../types';
 
@@ -110,6 +110,27 @@ describe('bingo detection (3x3)', () => {
     expect(checkBlackout(m, 3)).toBe(true);
     m[4] = false;
     expect(checkBlackout(m, 3)).toBe(false);
+  });
+});
+
+describe('closestLineNeed', () => {
+  it('is size (no help from FREE) on a fresh 5x5 card... minus the FREE center on its lines', () => {
+    // FREE (index 12) sits on one row, one column, and both diagonals, so
+    // those 4 lines start already needing one fewer than a line without it.
+    expect(closestLineNeed(freshMarked(5), 5)).toBe(4);
+  });
+
+  it('is 0 once a line is complete', () => {
+    const m = freshMarked(5);
+    [0, 1, 2, 3, 4].forEach((i) => (m[i] = true));
+    expect(closestLineNeed(m, 5)).toBe(0);
+  });
+
+  it('counts down as the nearest line fills in', () => {
+    const m = freshMarked(5);
+    m[0] = true;
+    m[1] = true;
+    expect(closestLineNeed(m, 5)).toBe(3);
   });
 });
 

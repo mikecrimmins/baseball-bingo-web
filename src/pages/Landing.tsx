@@ -32,18 +32,45 @@ export function Landing() {
         </p>
       </div>
 
-      <div className="grid w-full gap-4 sm:grid-cols-2">
-        {OPTIONS.map((opt) => (
+      <div className="flex w-full flex-col gap-3">
+        <span className="text-xs font-semibold tracking-wide text-navy-dark/50 uppercase">
+          Solo
+        </span>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {OPTIONS.map((opt) => (
+            <button
+              key={opt.size}
+              type="button"
+              onClick={() => start(opt.size)}
+              className="flex flex-col items-start gap-2 rounded-2xl border-2 border-navy-light/25 bg-white p-6 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-gold hover:shadow-md"
+            >
+              <span className="font-vintage text-2xl text-navy">{opt.title}</span>
+              <span className="text-sm text-navy-dark/70">{opt.blurb}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex w-full flex-col gap-3">
+        <span className="text-xs font-semibold tracking-wide text-navy-dark/50 uppercase">
+          With friends
+        </span>
+        <div className="grid gap-3 sm:grid-cols-2">
           <button
-            key={opt.size}
             type="button"
-            onClick={() => start(opt.size)}
-            className="flex flex-col items-start gap-2 rounded-2xl border-2 border-navy-light/25 bg-white p-6 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-gold hover:shadow-md"
+            onClick={() => navigate('/host')}
+            className="rounded-xl border-2 border-navy bg-navy px-5 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-navy-light"
           >
-            <span className="font-vintage text-2xl text-navy">{opt.title}</span>
-            <span className="text-sm text-navy-dark/70">{opt.blurb}</span>
+            Host a room
           </button>
-        ))}
+          <button
+            type="button"
+            onClick={() => navigate('/join')}
+            className="rounded-xl border-2 border-navy px-5 py-3.5 text-sm font-semibold text-navy transition-colors hover:bg-navy/10"
+          >
+            Join a room
+          </button>
+        </div>
       </div>
     </div>
   );

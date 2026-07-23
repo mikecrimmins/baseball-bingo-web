@@ -7,10 +7,12 @@ type Props = {
   card: BingoEvent[];
   marked: boolean[];
   winning: Set<number>;
+  /** Multiplayer only: cells whose event has been called but isn't marked yet. */
+  called?: Set<number>;
   onToggle: (index: number) => void;
 };
 
-export function BingoCard({ size, card, marked, winning, onToggle }: Props) {
+export function BingoCard({ size, card, marked, winning, called, onToggle }: Props) {
   return (
     <div
       className="mx-auto grid w-full max-w-xl gap-2 sm:gap-3"
@@ -22,6 +24,7 @@ export function BingoCard({ size, card, marked, winning, onToggle }: Props) {
           event={event}
           marked={marked[i]}
           winning={winning.has(i)}
+          called={called?.has(i)}
           onToggle={() => onToggle(i)}
         />
       ))}

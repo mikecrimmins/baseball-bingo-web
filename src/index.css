@@ -58,4 +58,24 @@
   .animate-banner-in {
     animation: banner-in 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
+
+  @keyframes pulse-called {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(242, 184, 7, 0.55);
+    }
+    50% {
+      box-shadow: 0 0 0 6px rgba(242, 184, 7, 0);
+    }
+  }
+  .animate-pulse-called {
+    animation: pulse-called 1.4s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-pulse-called,
+    .animate-cell-pop,
+    .animate-banner-in {
+      animation: none;
+    }
+  }
 }

@@ -50,3 +50,16 @@ export function markedCount(marked: readonly boolean[], size: CardSize): number 
   }
   return count;
 }
+
+/**
+ * Cells still needed to complete the nearest winning line — 0 means bingo
+ * already. Used for the roster's "needs 2" progress display.
+ */
+export function closestLineNeed(marked: readonly boolean[], size: CardSize): number {
+  let best: number = size;
+  for (const line of bingoLines(size)) {
+    const need = line.reduce((n, i) => n + (marked[i] ? 0 : 1), 0);
+    if (need < best) best = need;
+  }
+  return best;
+}

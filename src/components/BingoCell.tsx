@@ -5,10 +5,12 @@ type Props = {
   event: BingoEvent;
   marked: boolean;
   winning: boolean;
+  /** Multiplayer only: the caller has called this event but it isn't marked yet. */
+  called?: boolean;
   onToggle: () => void;
 };
 
-export function BingoCell({ event, marked, winning, onToggle }: Props) {
+export function BingoCell({ event, marked, winning, called, onToggle }: Props) {
   const [popping, setPopping] = useState(false);
   const prevMarked = useRef(marked);
 
@@ -42,14 +44,16 @@ export function BingoCell({ event, marked, winning, onToggle }: Props) {
       onClick={onToggle}
       aria-pressed={marked}
       className={[
-        'flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg border-2 px-0.5 text-center select-none',
+        'relative flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg border-2 px-0.5 text-center select-none',
         'transition-colors duration-150 active:scale-95',
         popping ? 'animate-cell-pop' : '',
         winning
           ? 'border-gold-bright bg-gold text-navy-dark ring-4 ring-gold-bright/40'
           : marked
             ? 'border-navy bg-navy text-white'
-            : 'border-navy-light/25 bg-white text-navy-dark hover:bg-navy/5',
+            : called
+              ? 'animate-pulse-called border-gold-bright bg-gold/25 text-navy-dark ring-4 ring-gold-bright/50'
+              : 'border-navy-light/25 bg-white text-navy-dark hover:bg-navy/5',
       ].join(' ')}
     >
       <span className="font-condensed text-sm leading-tight font-semibold sm:text-xl">
@@ -58,6 +62,11 @@ export function BingoCell({ event, marked, winning, onToggle }: Props) {
       <span className="hidden text-[9px] leading-tight tracking-wide uppercase opacity-70 sm:block sm:text-[11px]">
         {event.label}
       </span>
+      {called && !marked && (
+        <span className="absolute -top-1.5 -right-1.5 rounded-full bg-gold-bright px-1 text-[8px] font-bold text-navy-dark shadow sm:text-[9px]">
+          MARK?
+        </span>
+      )}
     </button>
   );
 }
