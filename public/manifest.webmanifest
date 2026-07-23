@@ -4,7 +4,7 @@
   "description": "A second-screen bingo game you play with friends while watching the game.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f4f7fc",
+  "background_color": "#f1e7ce",
   "theme_color": "#16305c",
   "orientation": "any",
   "icons": [
