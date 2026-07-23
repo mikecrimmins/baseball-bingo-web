@@ -40,7 +40,7 @@ export function SoloGame() {
             <div className="flex items-center gap-2">
               <Logo size={44} />
               <div>
-                <p className="font-display text-2xl font-bold text-navy sm:text-3xl">Baseball Bingo</p>
+                <p className="font-vintage text-2xl text-navy sm:text-3xl">Baseball Bingo</p>
                 <p className="text-sm text-navy-dark/60">
                   {size}×{size} · {derived.count}/{total} marked
                 </p>

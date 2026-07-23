@@ -64,16 +64,20 @@ src/
   store/          gameStore (zustand + localStorage persistence)
   components/     BingoCard, BingoCell, WinBanner, GameLayout
   pages/          Landing, SoloGame
+scripts/
+  gen-icons.mjs   regenerates public/icons/* and public/favicon.svg
 public/
   manifest.webmanifest, sw.js, icons/, favicon.svg   PWA assets
 ```
 
-App icons and favicon come from a designer-provided export (`favicon.svg`,
-`icon-192.png`, `icon-512.png`, `maskable-512.png`, `apple-touch-icon.png`).
-To update them, drop a new export with the same filenames into `public/` and
-`public/icons/` — sizes: favicon.svg is 64×64 (vector), icon-192/512 and
-maskable-512 are square PNGs at those pixel sizes, apple-touch-icon.png is
-180×180. Keep the mark within the center ~66% of the frame so it survives
+The app mark (baseball-stitching ring, designer-drawn) is recolored to the
+app's navy/gold/cream palette in `scripts/gen-icons.mjs` — the ring/seam/bg
+colors are parameters at the top of that script, so a palette tweak is a
+one-line change followed by `node scripts/gen-icons.mjs`. For a genuinely new
+mark shape, replace the SVG path data in the script's `mark()` function (or
+hand-place new exports with the same filenames/sizes: favicon.svg 64×64
+vector, icon-192/512 and maskable-512 square PNGs, apple-touch-icon.png
+180×180) — keep the mark within the center ~66% of the frame so it survives
 Android's maskable crop.
 
 ## Deployment

@@ -28,7 +28,7 @@ export function BingoCell({ event, marked, winning, onToggle }: Props) {
         className="flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg border-2 border-gold bg-gold/20 text-navy-dark select-none"
         aria-label="Free space"
       >
-        <span className="font-display text-lg font-semibold sm:text-2xl">★</span>
+        <span className="font-condensed text-lg font-semibold sm:text-2xl">★</span>
         <span className="text-[9px] font-semibold tracking-wide uppercase opacity-70 sm:text-xs">
           Free
         </span>
@@ -52,7 +52,7 @@ export function BingoCell({ event, marked, winning, onToggle }: Props) {
             : 'border-navy-light/25 bg-white text-navy-dark hover:bg-navy/5',
       ].join(' ')}
     >
-      <span className="font-display text-sm leading-tight font-semibold sm:text-xl">
+      <span className="font-condensed text-sm leading-tight font-semibold sm:text-xl">
         {event.abbr}
       </span>
       <span className="hidden text-[9px] leading-tight tracking-wide uppercase opacity-70 sm:block sm:text-[11px]">

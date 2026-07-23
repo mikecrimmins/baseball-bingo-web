@@ -11,7 +11,7 @@ export function WinBanner({ winState, canKeepGoing, onPlayAgain, onKeepGoing }: 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-dark/60 p-4 backdrop-blur-sm">
       <div className="animate-banner-in w-full max-w-sm rounded-2xl border-4 border-gold-bright bg-gold p-8 text-center shadow-2xl">
-        <p className="font-display text-4xl font-bold tracking-wide text-navy-dark sm:text-5xl">
+        <p className="font-vintage text-4xl tracking-wide text-navy-dark sm:text-5xl">
           {isBlackout ? 'BLACKOUT!' : 'BINGO!'}
         </p>
         <p className="mt-2 text-sm font-medium text-navy-dark/80">

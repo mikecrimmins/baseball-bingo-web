@@ -23,7 +23,7 @@ export function Landing() {
         <div className="flex items-center justify-center gap-3">
           <Logo size={56} className="sm:hidden" />
           <Logo size={72} className="hidden sm:block" />
-          <p className="font-display text-5xl font-bold tracking-wide text-navy sm:text-6xl">
+          <p className="font-vintage text-5xl tracking-wide text-navy sm:text-6xl">
             Baseball Bingo
           </p>
         </div>
@@ -40,7 +40,7 @@ export function Landing() {
             onClick={() => start(opt.size)}
             className="flex flex-col items-start gap-2 rounded-2xl border-2 border-navy-light/25 bg-white p-6 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-gold hover:shadow-md"
           >
-            <span className="font-display text-2xl font-semibold text-navy">{opt.title}</span>
+            <span className="font-vintage text-2xl text-navy">{opt.title}</span>
             <span className="text-sm text-navy-dark/70">{opt.blurb}</span>
           </button>
         ))}
