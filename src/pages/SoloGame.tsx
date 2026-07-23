@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import { useBingoGame } from '../lib/useBingoGame';
 import { useLiveGame } from '../lib/useLiveGame';
@@ -71,6 +71,12 @@ export function SoloGame() {
               >
                 New card
               </button>
+              <Link
+                to="/glossary"
+                className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
+              >
+                Glossary
+              </Link>
               <button
                 type="button"
                 onClick={() => navigate('/')}

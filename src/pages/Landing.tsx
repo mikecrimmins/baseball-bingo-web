@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import { Logo } from '../components/Logo';
 import type { CardSize } from '../lib/types';
@@ -72,6 +72,10 @@ export function Landing() {
           </button>
         </div>
       </div>
+
+      <Link to="/glossary" className="text-sm font-semibold text-navy-dark/50 hover:underline">
+        What do all these abbreviations mean? →
+      </Link>
     </div>
   );
 }

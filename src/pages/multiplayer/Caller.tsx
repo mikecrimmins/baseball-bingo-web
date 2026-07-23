@@ -1,4 +1,4 @@
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams, Link } from 'react-router-dom';
 import { useRoom } from '../../lib/useRoom';
 import { useRoomSession } from '../../lib/useRoomSession';
 import { useLiveGameControl } from '../../lib/useLiveGameControl';
@@ -49,16 +49,24 @@ function CallerReady({ code }: { code: string }) {
                 </p>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                leave();
-                navigate('/');
-              }}
-              className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
-            >
-              Leave game
-            </button>
+            <div className="flex gap-2">
+              <Link
+                to="/glossary"
+                className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
+              >
+                Glossary
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  leave();
+                  navigate('/');
+                }}
+                className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
+              >
+                Leave game
+              </button>
+            </div>
           </div>
         }
         main={
