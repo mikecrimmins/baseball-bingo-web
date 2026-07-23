@@ -11,8 +11,8 @@ export function Caller() {
   const { code } = useParams<{ code: string }>();
   const status = useRoomSession(code);
 
-  if (status === 'checking') return <CenteredNote text="Loading room…" />;
-  if (status === 'not-found') return <CenteredNote text="Room not found." />;
+  if (status === 'checking') return <CenteredNote text="Loading game…" />;
+  if (status === 'not-found') return <CenteredNote text="Game not found." />;
   return <CallerReady code={code as string} />;
 }
 
@@ -20,7 +20,7 @@ function CallerReady({ code }: { code: string }) {
   const navigate = useNavigate();
   const { room, me, isCaller, players, callEvent, leave } = useRoom(code);
 
-  if (!room || !me) return <CenteredNote text="Loading room…" />;
+  if (!room || !me) return <CenteredNote text="Loading game…" />;
   if (room.status === 'waiting') return <Navigate to={`/room/${code}/lobby`} replace />;
   if (!isCaller) return <Navigate to={`/room/${code}/play`} replace />;
 
@@ -36,7 +36,7 @@ function CallerReady({ code }: { code: string }) {
               <div>
                 <p className="font-vintage text-2xl text-navy sm:text-3xl">Calling</p>
                 <p className="text-sm text-navy-dark/60">
-                  Room {code} · tap a play as it happens
+                  Game {code} · tap a play as it happens
                 </p>
               </div>
             </div>
@@ -48,7 +48,7 @@ function CallerReady({ code }: { code: string }) {
               }}
               className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
             >
-              Leave room
+              Leave game
             </button>
           </div>
         }

@@ -152,7 +152,7 @@ export async function fetchRoom(roomCode: string): Promise<Room> {
     ]);
   if (roomErr) throw roomErr;
   if (playersErr) throw playersErr;
-  if (!roomRow) throw new Error(`Room ${roomCode} no longer exists.`);
+  if (!roomRow) throw new Error(`Game ${roomCode} no longer exists.`);
   return assembleRoom(roomRow as RoomRow, (playerRows ?? []) as PlayerRow[]);
 }
 

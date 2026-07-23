@@ -30,7 +30,7 @@ export function JoinRoom() {
       <div className="mx-auto flex min-h-full max-w-md flex-col items-center justify-center gap-4 px-4 py-16 text-center">
         <p className="font-vintage text-2xl text-navy">Multiplayer isn't configured yet</p>
         <p className="text-sm text-navy-dark/70">
-          This deployment doesn't have Supabase environment variables set, so rooms aren't
+          This deployment doesn't have Supabase environment variables set, so games aren't
           available. Solo play still works fully.
         </p>
         <Link
@@ -47,12 +47,12 @@ export function JoinRoom() {
     <div className="mx-auto flex min-h-full max-w-md flex-col justify-center gap-8 px-4 py-16">
       <div className="flex items-center justify-center gap-3 text-center">
         <Logo size={48} />
-        <p className="font-vintage text-3xl text-navy">Join a room</p>
+        <p className="font-vintage text-3xl text-navy">Join a game</p>
       </div>
 
       <form onSubmit={submit} className="flex flex-col gap-6">
         <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-navy-dark/80">Room code</span>
+          <span className="text-sm font-semibold text-navy-dark/80">Game code</span>
           <input
             required
             pattern="[A-Za-z]{4}"
@@ -84,7 +84,7 @@ export function JoinRoom() {
           disabled={connecting || code.length !== 4}
           className="rounded-lg bg-navy px-4 py-3 font-semibold text-white transition-colors hover:bg-navy-light disabled:opacity-60"
         >
-          {connecting ? 'Joining…' : 'Join room'}
+          {connecting ? 'Joining…' : 'Join game'}
         </button>
 
         <Link to="/" className="text-center text-sm text-navy-dark/60 hover:underline">

@@ -86,7 +86,7 @@ export function useRoom(roomCode: string | null) {
       store.setHostedRoomCode(code);
       return code;
     } catch (e) {
-      store.setError(e instanceof Error ? e.message : 'Could not create room');
+      store.setError(e instanceof Error ? e.message : 'Could not create game');
       throw e;
     } finally {
       store.setConnecting(false);
@@ -122,13 +122,13 @@ export function useRoom(roomCode: string | null) {
       const current = await sync.fetchRoom(code);
       const alreadyIn = !!current.players[store.playerId];
       if (!alreadyIn && Object.keys(current.players).length >= MAX_PLAYERS) {
-        throw new Error('This room is full (max 8 players).');
+        throw new Error('This game is full (max 8 players).');
       }
       // Card size is the room's, not the joining player's choice.
       const player = buildPlayer(store.playerId, name, false, current.size);
       await sync.joinRoom({ roomCode: code, player });
     } catch (e) {
-      store.setError(e instanceof Error ? e.message : 'Could not join room');
+      store.setError(e instanceof Error ? e.message : 'Could not join game');
       throw e;
     } finally {
       store.setConnecting(false);

@@ -61,14 +61,14 @@ export function Landing() {
             onClick={() => navigate('/host')}
             className="rounded-xl border-2 border-navy bg-navy px-5 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-navy-light"
           >
-            Host a room
+            Host a game
           </button>
           <button
             type="button"
             onClick={() => navigate('/join')}
             className="rounded-xl border-2 border-navy px-5 py-3.5 text-sm font-semibold text-navy transition-colors hover:bg-navy/10"
           >
-            Join a room
+            Join a game
           </button>
         </div>
       </div>

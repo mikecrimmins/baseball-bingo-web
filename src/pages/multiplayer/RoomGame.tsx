@@ -12,8 +12,8 @@ export function RoomGame() {
   const { code } = useParams<{ code: string }>();
   const status = useRoomSession(code);
 
-  if (status === 'checking') return <CenteredNote text="Loading room…" />;
-  if (status === 'not-found') return <CenteredNote text="Room not found." />;
+  if (status === 'checking') return <CenteredNote text="Loading game…" />;
+  if (status === 'not-found') return <CenteredNote text="Game not found." />;
   return <RoomGameReady code={code as string} />;
 }
 
@@ -22,7 +22,7 @@ function RoomGameReady({ code }: { code: string }) {
   const { room, me, isCaller, players, calledPending, toggleCell, leave } = useRoom(code);
   const derived = useBingoGame(me?.marked ?? [], me?.size ?? 5);
 
-  if (!room || !me) return <CenteredNote text="Loading room…" />;
+  if (!room || !me) return <CenteredNote text="Loading game…" />;
   if (room.status === 'waiting') return <Navigate to={`/room/${code}/lobby`} replace />;
   if (isCaller) return <Navigate to={`/room/${code}/caller`} replace />;
 
@@ -38,7 +38,7 @@ function RoomGameReady({ code }: { code: string }) {
               <div>
                 <p className="font-vintage text-2xl text-navy sm:text-3xl">Baseball Bingo</p>
                 <p className="text-sm text-navy-dark/60">
-                  Room {code} · {derived.count}/{total} marked
+                  Game {code} · {derived.count}/{total} marked
                 </p>
               </div>
             </div>
@@ -50,7 +50,7 @@ function RoomGameReady({ code }: { code: string }) {
               }}
               className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
             >
-              Leave room
+              Leave game
             </button>
           </div>
         }

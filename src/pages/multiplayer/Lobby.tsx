@@ -8,7 +8,7 @@ export function Lobby() {
   const { code } = useParams<{ code: string }>();
   const status = useRoomSession(code);
 
-  if (status === 'checking') return <CenteredNote text="Loading room…" />;
+  if (status === 'checking') return <CenteredNote text="Loading game…" />;
   if (status === 'not-found') return <RoomNotFound />;
   return <LobbyReady code={code as string} />;
 }
@@ -27,7 +27,7 @@ function LobbyReady({ code }: { code: string }) {
     }
   }, [room?.status, isCaller, code, navigate]);
 
-  if (!room) return <CenteredNote text="Loading room…" />;
+  if (!room) return <CenteredNote text="Loading game…" />;
 
   const link = `${window.location.origin}/join/${code}`;
 
@@ -59,7 +59,7 @@ function LobbyReady({ code }: { code: string }) {
 
       <div className="flex flex-col items-center gap-2 rounded-xl border-2 border-navy-light/25 bg-white p-5 text-center">
         <span className="text-xs font-semibold tracking-wide text-navy-dark/60 uppercase">
-          Room code
+          Game code
         </span>
         <span className="font-condensed text-4xl tracking-[0.3em] text-navy">{code}</span>
         <button
@@ -122,7 +122,7 @@ function LobbyReady({ code }: { code: string }) {
         }}
         className="text-center text-sm text-navy-dark/60 hover:underline"
       >
-        Leave room
+        Leave game
       </button>
     </div>
   );
@@ -131,9 +131,9 @@ function LobbyReady({ code }: { code: string }) {
 function RoomNotFound() {
   return (
     <div className="mx-auto flex min-h-full max-w-md flex-col items-center justify-center gap-4 px-4 py-16 text-center">
-      <p className="font-vintage text-2xl text-navy">Room not found</p>
+      <p className="font-vintage text-2xl text-navy">Game not found</p>
       <p className="text-sm text-navy-dark/70">
-        That code doesn't match a room — it may have expired or been typed wrong.
+        That code doesn't match a game — it may have expired or been typed wrong.
       </p>
       <Link
         to="/join"
