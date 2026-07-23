@@ -5,6 +5,7 @@ import { useBingoGame } from '../lib/useBingoGame';
 import { BingoCard } from '../components/BingoCard';
 import { WinBanner } from '../components/WinBanner';
 import { GameLayout } from '../components/GameLayout';
+import { Logo } from '../components/Logo';
 
 export function SoloGame() {
   const navigate = useNavigate();
@@ -36,11 +37,14 @@ export function SoloGame() {
       <GameLayout
         header={
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="font-display text-2xl font-bold text-navy sm:text-3xl">⚾ Baseball Bingo</p>
-              <p className="text-sm text-navy-dark/60">
-                {size}×{size} · {derived.count}/{total} marked
-              </p>
+            <div className="flex items-center gap-2">
+              <Logo size={44} />
+              <div>
+                <p className="font-display text-2xl font-bold text-navy sm:text-3xl">Baseball Bingo</p>
+                <p className="text-sm text-navy-dark/60">
+                  {size}×{size} · {derived.count}/{total} marked
+                </p>
+              </div>
             </div>
             <div className="flex gap-2">
               <button

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
+import { Logo } from '../components/Logo';
 import type { CardSize } from '../lib/types';
 
 const OPTIONS: { size: CardSize; title: string; blurb: string }[] = [
@@ -19,9 +20,13 @@ export function Landing() {
   return (
     <div className="mx-auto flex min-h-full max-w-2xl flex-col items-center justify-center gap-10 px-4 py-16 text-center">
       <div>
-        <p className="font-display text-5xl font-bold tracking-wide text-navy sm:text-6xl">
-          ⚾ Baseball Bingo
-        </p>
+        <div className="flex items-center justify-center gap-3">
+          <Logo size={56} className="sm:hidden" />
+          <Logo size={72} className="hidden sm:block" />
+          <p className="font-display text-5xl font-bold tracking-wide text-navy sm:text-6xl">
+            Baseball Bingo
+          </p>
+        </div>
         <p className="mt-3 text-base text-navy-dark/70 sm:text-lg">
           Mark the plays as they happen. Watch the game, play along.
         </p>
