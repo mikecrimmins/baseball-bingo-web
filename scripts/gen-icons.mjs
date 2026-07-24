@@ -1,17 +1,17 @@
 // Regenerates the PWA icon set from the designer's baseball-stitching-ring
-// mark, recolored to match the app's navy/gold/cream palette. Source mark
-// structure comes from the designer's logo-export/favicon.svg; only the
-// fill/stroke colors are parameterized here.
+// mark, recolored to match the app's vintage ballpark palette (paper/navy/
+// stitch-red). Source mark structure comes from the designer's
+// logo-export/favicon.svg; only the fill/stroke colors are parameterized here.
 // Run: node scripts/gen-icons.mjs
 import sharp from 'sharp';
 import { writeFileSync } from 'node:fs';
 
 const COLORS = {
-  bg: '#FFFFFF',
-  ring: '#16305C', // app navy (matches --color-navy)
-  ball: '#FFFFFF',
-  ballStroke: 'rgba(22,48,92,0.28)',
-  seam: '#E6A400', // app gold (matches --color-gold)
+  bg: '#FFFDF7', // --color-paper-bright (never pure white, per style spec)
+  ring: '#1B2A4A', // app navy (matches --color-navy)
+  ball: '#FFFDF7', // --color-paper-bright
+  ballStroke: 'rgba(27,42,74,0.28)',
+  seam: '#C8102E', // app stitch-red (matches --color-stitch-red)
 };
 
 function mark(scale) {

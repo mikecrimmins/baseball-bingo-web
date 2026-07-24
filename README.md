@@ -13,7 +13,60 @@ independent codebases, including separate Supabase projects.
 ## Status
 
 **All three milestones are done**: solo play, multiplayer rooms, and live
-MLB game assist.
+MLB game assist. The app has also been through a full **vintage ballpark
+visual restyle** — see below.
+
+## Design
+
+The look is old ballpark ticket stock, not a scoreboard app: cream paper
+(`--color-paper`/`--color-paper-bright`, never pure white), deep navy ink
+(`--color-navy`), and a single stitch-red accent (`--color-stitch-red`) used
+sparingly — status badges, dashed "called" borders, the mark stamp — never as
+a body-text color. Depth comes from a hard 2px offset shadow
+(`.ticket-shadow`, a print-misregistration look), never a soft blur; corners
+stay sharp (`rounded`/`rounded-[3px]`, no big radii).
+
+Three typefaces, each with one job: **Ultra** for display headlines and mode
+names only, always uppercase (enforced by the `.headline` utility so no call
+site has to remember to caps it), **Graduate** for eyebrows/buttons/labels,
+and **Barlow Condensed** for body copy and card cell text.
+
+Four shared motifs carry the theme everywhere:
+- **`Ticket`** ([src/components/Ticket.tsx](src/components/Ticket.tsx)) — the
+  signature component. A perforated ticket stub with a slight tilt that
+  straightens and lifts on hover, and flattens to 0° once cards stack under
+  the `sm` breakpoint. Used for the landing page's game-mode picker, the
+  lobby's room code, and the join screen's code entry.
+- **`PennantBanner`** ([src/components/PennantBanner.tsx](src/components/PennantBanner.tsx))
+  — a pointed-both-ends navy banner (`clip-path` polygon) replacing the old
+  gold celebration box for the win banner and room announcements.
+- **`StampBadge`** ([src/components/StampBadge.tsx](src/components/StampBadge.tsx))
+  — a small rotated rubber-stamp label (Host/Caller/Called).
+  - **`StitchDivider`** ([src/components/StitchDivider.tsx](src/components/StitchDivider.tsx))
+  — a dashed SVG curve used as a section break.
+
+Bingo cells stay `paper-bright` whether marked or not (readability over
+drama); a mark renders as a rotated stitch-red ring "stamp" instead of a
+solid fill, and the winning line gets a red cell border on top of that. FREE
+is the logo mark, not text. The Caller view reads as a lineup card — a
+numbered list of plays, not a button grid.
+
+One deliberate deviation from the original design brief: `--color-ink-faint`
+is `#726A52`, not the brief's literal `#8A8267` — that value only clears
+~3.3:1 contrast against paper (fails WCAG AA for small text); the shipped
+value clears 4.7:1. Every other themed color pair checked passes AA or
+better (navy/paper 12.4:1, ink-muted/paper 6.65:1, stitch-red/paper 5.1:1,
+paper-bright/navy 14:1).
+
+Accessibility floor: every interactive element gets a 2px solid navy
+`:focus-visible` outline (no per-element opt-in needed — it's global in
+[`src/index.css`](src/index.css)), and the four themed animations (card
+stamp, banner entrance, called-cell pulse, ticket tear) all collapse to `none`
+under `prefers-reduced-motion: reduce`.
+
+PWA icons (`public/favicon.svg`, `public/icons/*`) are generated from the
+same palette by [`scripts/gen-icons.mjs`](scripts/gen-icons.mjs) — see that
+file if the palette changes again.
 
 ## Features so far
 
@@ -177,8 +230,8 @@ supabase/
 ```
 
 App icons and favicon come from a designer-drawn mark, recolored to the app's
-navy/gold/cream palette in `scripts/gen-icons.mjs` — the ring/seam/bg colors
-are parameters at the top of that script, so a palette tweak is a one-line
+paper/navy/stitch-red palette in `scripts/gen-icons.mjs` — the ring/seam/bg
+colors are parameters at the top of that script, so a palette tweak is a one-line
 change followed by `node scripts/gen-icons.mjs`. For a genuinely new mark
 shape, replace the SVG path data in the script's `mark()` function (or
 hand-place new exports with the same filenames/sizes: favicon.svg 64×64
