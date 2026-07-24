@@ -1,5 +1,7 @@
 # Baseball Bingo (web) ⚾
 
+**Live at [playbaseballbingo.com](https://playbaseballbingo.com).**
+
 A second-screen bingo game for watching baseball with friends — mark in-game
 events on a bingo card as they happen. Built with Vite, React, TypeScript, and
 Tailwind CSS.
