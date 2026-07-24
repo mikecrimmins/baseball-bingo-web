@@ -28,7 +28,7 @@ export function Landing() {
           </p>
         </div>
         <p className="mt-3 text-base text-navy-dark/70 sm:text-lg">
-          Mark the plays as they happen. Watch the game, play along.
+          Watch the game. Mark the plays as they happen. Play along.
         </p>
       </div>
 
