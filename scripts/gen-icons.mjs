@@ -1,28 +1,23 @@
-// Regenerates the PWA icon set from the designer's baseball-stitching-ring
-// mark, recolored to match the app's vintage ballpark palette (paper/navy/
-// stitch-red). Source mark structure comes from the designer's
-// logo-export/favicon.svg; only the fill/stroke colors are parameterized here.
+// Regenerates the PWA icon set from the same mark as the in-app <Logo>
+// component (src/components/Logo.tsx) — a single circle with two dashed
+// seam curves. Keep this in sync with Logo.tsx by hand; the two can't share
+// code since one renders to React and the other to static PNG/SVG files.
 // Run: node scripts/gen-icons.mjs
 import sharp from 'sharp';
 import { writeFileSync } from 'node:fs';
 
 const COLORS = {
   bg: '#FFFDF7', // --color-paper-bright (never pure white, per style spec)
-  ring: '#1B2A4A', // app navy (matches --color-navy)
   ball: '#FFFDF7', // --color-paper-bright
-  ballStroke: 'rgba(27,42,74,0.28)',
+  ring: '#1B2A4A', // app navy (matches --color-navy)
   seam: '#C8102E', // app stitch-red (matches --color-stitch-red)
 };
 
 function mark(scale) {
   const inner =
-    `<circle cx="50" cy="50" r="45" fill="none" stroke="${COLORS.ring}" stroke-width="3.4"></circle>` +
-    `<circle cx="50" cy="50" r="39" fill="none" stroke="${COLORS.ring}" stroke-width="2" stroke-dasharray="2 4.6" stroke-linecap="round"></circle>` +
-    `<g transform="translate(24,24) scale(0.52)">` +
-    `<circle cx="50" cy="50" r="46" fill="${COLORS.ball}" stroke="${COLORS.ballStroke}" stroke-width="1.4"></circle>` +
-    `<path d="M26,15 C13,32 13,68 26,85" fill="none" stroke="${COLORS.seam}" stroke-width="3.6" stroke-linecap="round" stroke-dasharray="3.4 5"></path>` +
-    `<path d="M74,15 C87,32 87,68 74,85" fill="none" stroke="${COLORS.seam}" stroke-width="3.6" stroke-linecap="round" stroke-dasharray="3.4 5"></path>` +
-    `</g>`;
+    `<circle cx="50" cy="50" r="46" fill="${COLORS.ball}" stroke="${COLORS.ring}" stroke-width="3"></circle>` +
+    `<path d="M26,15 C13,32 13,68 26,85" fill="none" stroke="${COLORS.seam}" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="3 4.5"></path>` +
+    `<path d="M74,15 C87,32 87,68 74,85" fill="none" stroke="${COLORS.seam}" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="3 4.5"></path>`;
   return `<g transform="translate(50,50) scale(${scale}) translate(-50,-50)">${inner}</g>`;
 }
 
