@@ -37,13 +37,13 @@ export function useLiveGameControl({ isHost, mlbGamePk, mlbGameLabel, onFollow, 
         <button
           type="button"
           onClick={() => setPicking(true)}
-          className="w-full rounded-xl border-2 border-dashed border-navy-light/30 px-4 py-3 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
+          className="font-varsity w-full rounded-[3px] border-2 border-dashed border-stitch-red px-4 py-3 text-xs tracking-[0.1em] text-stitch-red uppercase transition-colors hover:bg-stitch-red/5"
         >
           Follow a live game
         </button>
       )
     ) : (
-      <p className="text-center text-xs text-navy-dark/50">
+      <p className="text-center text-xs text-ink-faint">
         The host hasn't attached a live game yet.
       </p>
     );

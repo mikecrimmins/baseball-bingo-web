@@ -1,18 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --font-condensed: "Oswald", system-ui, sans-serif;
-  --font-vintage: "Bevan", "Georgia", serif;
-  --font-body: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Ultra", "Georgia", serif;
+  --font-varsity: "Graduate", system-ui, sans-serif;
+  --font-body: "Barlow Condensed", system-ui, "Segoe UI", Roboto, sans-serif;
 
-  --color-navy: #16305c;
-  --color-navy-dark: #0c1a2e;
-  --color-navy-light: #274063;
-  --color-gold: #e6a400;
-  --color-gold-bright: #f2b807;
-  --color-grass: #1f6b3f;
-  --color-cream: #f4f7fc;
-  --color-chalk: #ffffff;
+  --color-paper: #f5efdf;
+  --color-paper-bright: #fffdf7;
+  --color-paper-edge: #d8cfb6;
+  --color-navy: #1b2a4a;
+  --color-stitch-red: #c8102e;
+  --color-red-deep: #8a2a1e;
+  --color-ink-muted: #5a5343;
+  /* Darkened from the spec's #8A8267 (~3.3:1 on paper, fails AA) to ~4.7:1. */
+  --color-ink-faint: #726a52;
 }
 
 @layer base {
@@ -24,57 +25,97 @@
 
   body {
     font-family: var(--font-body);
-    background-color: var(--color-cream);
-    color: var(--color-navy-dark);
+    background-color: var(--color-paper);
+    color: var(--color-navy);
+  }
+
+  /* Uniform, visible keyboard focus everywhere — no per-element opt-in needed. */
+  :focus-visible {
+    outline: 2px solid var(--color-navy);
+    outline-offset: 2px;
   }
 }
 
 @layer utilities {
-  @keyframes cell-pop {
+  /* Solid, hard-edged offset shadow — the only allowed depth cue (a "print
+     misregistration" look), never a soft/blurred drop shadow. */
+  .ticket-shadow {
+    box-shadow: 2px 2px 0 0 var(--color-navy);
+  }
+
+  /* The Display face (Ultra) is always headlines/mode names, always caps. */
+  .headline {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    line-height: 1.05;
+  }
+
+  @keyframes stamp-down {
     0% {
-      transform: scale(1);
+      transform: scale(1.5) rotate(var(--stamp-rotate, -6deg));
+      opacity: 0;
     }
-    40% {
-      transform: scale(1.18);
+    60% {
+      transform: scale(0.92) rotate(var(--stamp-rotate, -6deg));
+      opacity: 1;
     }
     100% {
-      transform: scale(1);
+      transform: scale(1) rotate(var(--stamp-rotate, -6deg));
+      opacity: 1;
     }
   }
-  .animate-cell-pop {
-    animation: cell-pop 260ms ease-out;
+  .animate-stamp-down {
+    animation: stamp-down 220ms ease-out;
   }
 
   @keyframes banner-in {
     0% {
-      transform: scale(0.85);
+      transform: translateY(-16px) rotate(-1deg);
       opacity: 0;
     }
     100% {
-      transform: scale(1);
+      transform: translateY(0) rotate(0deg);
       opacity: 1;
     }
   }
   .animate-banner-in {
-    animation: banner-in 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: banner-in 240ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   @keyframes pulse-called {
     0%,
     100% {
-      box-shadow: 0 0 0 0 rgba(242, 184, 7, 0.55);
+      box-shadow: 0 0 0 0 rgba(200, 16, 46, 0.55);
     }
     50% {
-      box-shadow: 0 0 0 6px rgba(242, 184, 7, 0);
+      box-shadow: 0 0 0 6px rgba(200, 16, 46, 0);
     }
   }
   .animate-pulse-called {
     animation: pulse-called 1.4s ease-in-out infinite;
   }
+
+  @keyframes tear-stub {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      clip-path: inset(0 0 0% 0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(48px) rotate(2deg);
+      clip-path: inset(0 0 100% 0);
+      opacity: 0;
+    }
+  }
+  .animate-tear-stub {
+    animation: tear-stub 380ms ease-in forwards;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .animate-pulse-called,
-    .animate-cell-pop,
-    .animate-banner-in {
+    .animate-stamp-down,
+    .animate-banner-in,
+    .animate-tear-stub {
       animation: none;
     }
   }

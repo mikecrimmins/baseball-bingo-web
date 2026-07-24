@@ -26,24 +26,24 @@ export function GamePicker({ onPick, onCancel }: Props) {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 rounded-xl border-2 border-navy-light/20 bg-white p-4">
+    <div className="flex flex-col gap-2 rounded border-[1.5px] border-navy bg-paper-bright p-4">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold tracking-wide text-navy-dark/60 uppercase">
+        <span className="font-varsity text-xs tracking-[0.12em] text-ink-muted uppercase">
           Today's games
         </span>
         <button
           type="button"
           onClick={onCancel}
-          className="text-xs font-semibold text-navy-dark/50 hover:underline"
+          className="text-xs font-semibold text-ink-faint hover:underline"
         >
           Cancel
         </button>
       </div>
 
-      {error && <p className="text-sm text-red-700">{error}</p>}
-      {!games && !error && <p className="text-sm text-navy-dark/60">Loading…</p>}
+      {error && <p className="text-sm text-stitch-red">{error}</p>}
+      {!games && !error && <p className="text-sm text-ink-muted">Loading…</p>}
       {games && games.length === 0 && (
-        <p className="text-sm text-navy-dark/60">No games scheduled today.</p>
+        <p className="text-sm text-ink-muted">No games scheduled today.</p>
       )}
 
       <ul className="flex max-h-72 flex-col gap-1.5 overflow-y-auto">
@@ -52,10 +52,10 @@ export function GamePicker({ onPick, onCancel }: Props) {
             <button
               type="button"
               onClick={() => onPick(g.gamePk, label(g))}
-              className="flex w-full flex-col items-start gap-0.5 rounded-lg border-2 border-navy-light/20 px-3 py-2 text-left transition-colors hover:bg-navy/5"
+              className="flex w-full flex-col items-start gap-0.5 rounded-[3px] border-[1.5px] border-paper-edge px-3 py-2 text-left transition-colors hover:bg-paper"
             >
-              <span className="text-sm font-medium text-navy-dark">{label(g)}</span>
-              <span className="text-xs text-navy-dark/50">{g.status.detailedState}</span>
+              <span className="text-sm font-medium text-navy">{label(g)}</span>
+              <span className="text-xs text-ink-faint">{g.status.detailedState}</span>
             </button>
           </li>
         ))}

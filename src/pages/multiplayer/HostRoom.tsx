@@ -30,24 +30,31 @@ export function HostRoom() {
     <div className="mx-auto flex min-h-full max-w-md flex-col justify-center gap-8 px-4 py-16">
       <div className="flex items-center justify-center gap-3 text-center">
         <Logo size={48} />
-        <p className="font-vintage text-3xl text-navy">Host a game</p>
+        <p className="headline text-3xl text-navy">Host a game</p>
       </div>
 
-      <form onSubmit={submit} className="flex flex-col gap-6">
+      <form
+        onSubmit={submit}
+        className="flex flex-col gap-6 rounded border-[1.5px] border-navy bg-paper-bright p-5"
+      >
         <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-navy-dark/80">Your name</span>
+          <span className="font-varsity text-xs tracking-[0.12em] text-ink-muted uppercase">
+            Your name
+          </span>
           <input
             required
             maxLength={24}
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Player"
-            className="rounded-lg border-2 border-navy-light/25 bg-white px-3 py-2.5 text-navy-dark outline-none focus:border-gold"
+            className="rounded-[3px] border-[1.5px] border-paper-edge bg-paper px-3 py-2.5 text-navy outline-none focus:border-stitch-red"
           />
         </label>
 
         <div className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-navy-dark/80">Card size</span>
+          <span className="font-varsity text-xs tracking-[0.12em] text-ink-muted uppercase">
+            Card size
+          </span>
           <div className="grid grid-cols-2 gap-2">
             {([3, 5] as const).map((s) => (
               <button
@@ -55,10 +62,10 @@ export function HostRoom() {
                 type="button"
                 onClick={() => setSize(s)}
                 className={[
-                  'rounded-lg border-2 px-3 py-2.5 text-sm font-semibold transition-colors',
+                  'rounded-[3px] border-[1.5px] px-3 py-2.5 text-sm font-medium transition-colors',
                   size === s
-                    ? 'border-navy bg-navy text-white'
-                    : 'border-navy-light/25 bg-white text-navy-dark hover:bg-navy/5',
+                    ? 'border-navy bg-navy text-paper-bright'
+                    : 'border-paper-edge bg-paper text-navy hover:bg-paper-edge/30',
                 ].join(' ')}
               >
                 {s}×{s} {s === 3 ? '— quick' : '— full'}
@@ -67,31 +74,34 @@ export function HostRoom() {
           </div>
         </div>
 
-        <label className="flex items-start gap-3 rounded-lg border-2 border-navy-light/25 bg-white p-3">
+        <label className="flex items-start gap-3 rounded-[3px] border-[1.5px] border-paper-edge bg-paper p-3">
           <input
             type="checkbox"
             checked={callerMode}
             onChange={(e) => setCallerMode(e.target.checked)}
-            className="mt-0.5 h-4 w-4 accent-navy"
+            className="mt-0.5 h-4 w-4 accent-stitch-red"
           />
-          <span className="text-sm text-navy-dark">
+          <span className="text-sm text-navy">
             <span className="font-semibold">I'll be the caller</span> — I'll watch the event list
             and tap plays as they happen; everyone's card highlights the match. (Everyone can still
             mark manually either way.)
           </span>
         </label>
 
-        {error && <p className="text-sm font-medium text-red-700">{error}</p>}
+        {error && <p className="text-sm font-medium text-stitch-red">{error}</p>}
 
         <button
           type="submit"
           disabled={connecting}
-          className="rounded-lg bg-navy px-4 py-3 font-semibold text-white transition-colors hover:bg-navy-light disabled:opacity-60"
+          className="font-varsity rounded-[3px] bg-navy px-4 py-3 text-xs tracking-[0.12em] text-paper-bright uppercase transition-colors hover:bg-navy/90 disabled:opacity-60"
         >
           {connecting ? 'Creating game…' : 'Create game'}
         </button>
 
-        <Link to="/" className="text-center text-sm text-navy-dark/60 hover:underline">
+        <Link
+          to="/"
+          className="text-center text-sm text-ink-faint underline decoration-dotted underline-offset-4 hover:text-navy"
+        >
           Back
         </Link>
       </form>
@@ -102,14 +112,14 @@ export function HostRoom() {
 function SetupNotice() {
   return (
     <div className="mx-auto flex min-h-full max-w-md flex-col items-center justify-center gap-4 px-4 py-16 text-center">
-      <p className="font-vintage text-2xl text-navy">Multiplayer isn't configured yet</p>
-      <p className="text-sm text-navy-dark/70">
+      <p className="headline text-2xl text-navy">Multiplayer isn't configured yet</p>
+      <p className="text-sm text-ink-muted">
         This deployment doesn't have Supabase environment variables set, so games aren't
         available. Solo play still works fully.
       </p>
       <Link
         to="/"
-        className="rounded-lg border-2 border-navy px-4 py-2.5 text-sm font-semibold text-navy hover:bg-navy/10"
+        className="font-varsity rounded-[3px] border-[1.5px] border-navy px-4 py-2.5 text-xs tracking-[0.12em] text-navy uppercase hover:bg-navy/5"
       >
         Back to solo play
       </Link>

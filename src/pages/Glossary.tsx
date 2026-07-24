@@ -24,14 +24,17 @@ export function Glossary() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Logo size={40} />
-          <p className="font-vintage text-3xl text-navy">Glossary</p>
+          <p className="headline text-3xl text-navy">Glossary</p>
         </div>
-        <Link to="/" className="text-sm font-semibold text-navy-dark/60 hover:underline">
+        <Link
+          to="/"
+          className="text-sm text-ink-faint underline decoration-dotted underline-offset-4 hover:text-navy"
+        >
           Back
         </Link>
       </div>
 
-      <p className="text-sm text-navy-dark/70">
+      <p className="text-sm text-ink-muted">
         What every square on the card means — {ALL_EVENTS.length} plays, plain English.
       </p>
 
@@ -40,25 +43,23 @@ export function Glossary() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search a term…"
-        className="rounded-lg border-2 border-navy-light/25 bg-white px-3 py-2.5 text-navy-dark outline-none focus:border-gold"
+        className="rounded-[3px] border-[1.5px] border-paper-edge bg-paper-bright px-3 py-2.5 text-navy outline-none focus:border-stitch-red"
       />
 
       {filtered.length === 0 ? (
-        <p className="text-center text-sm text-navy-dark/60">No terms match "{query}".</p>
+        <p className="text-center text-sm text-ink-muted">No terms match "{query}".</p>
       ) : (
         <ul className="flex flex-col gap-2">
           {filtered.map((event) => (
             <li
               key={event.abbr}
-              className="flex items-start gap-4 rounded-lg border-2 border-navy-light/20 bg-white p-3.5"
+              className="flex items-start gap-4 rounded border-[1.5px] border-navy bg-paper-bright p-3.5"
             >
-              <span className="font-condensed w-16 shrink-0 text-lg font-semibold text-navy">
-                {event.abbr}
-              </span>
+              <span className="w-16 shrink-0 text-lg font-semibold text-navy">{event.abbr}</span>
               <div>
-                <p className="text-sm font-semibold text-navy-dark">{event.label}</p>
+                <p className="text-sm font-semibold text-navy">{event.label}</p>
                 {event.description && (
-                  <p className="mt-0.5 text-sm text-navy-dark/70">{event.description}</p>
+                  <p className="mt-0.5 text-sm text-ink-muted">{event.description}</p>
                 )}
               </div>
             </li>

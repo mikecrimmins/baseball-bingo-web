@@ -55,8 +55,8 @@ function RoomGameReady({ code }: { code: string }) {
             <div className="flex items-center gap-2">
               <Logo size={40} />
               <div>
-                <p className="font-vintage text-2xl text-navy sm:text-3xl">Baseball Bingo</p>
-                <p className="text-sm text-navy-dark/60">
+                <p className="headline text-2xl text-navy sm:text-3xl">Baseball Bingo</p>
+                <p className="text-sm text-ink-muted">
                   Game {code} · {derived.count}/{total} marked
                 </p>
               </div>
@@ -64,7 +64,7 @@ function RoomGameReady({ code }: { code: string }) {
             <div className="flex gap-2">
               <Link
                 to="/glossary"
-                className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
+                className="font-varsity rounded-[3px] px-3 py-2 text-xs tracking-[0.1em] text-ink-muted uppercase transition-colors hover:bg-navy/5"
               >
                 Glossary
               </Link>
@@ -74,7 +74,7 @@ function RoomGameReady({ code }: { code: string }) {
                   leave();
                   navigate('/');
                 }}
-                className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
+                className="font-varsity rounded-[3px] px-3 py-2 text-xs tracking-[0.1em] text-ink-muted uppercase transition-colors hover:bg-navy/5"
               >
                 Leave game
               </button>
@@ -105,7 +105,7 @@ function RoomGameReady({ code }: { code: string }) {
 
 function CenteredNote({ text }: { text: string }) {
   return (
-    <div className="mx-auto flex min-h-full max-w-md items-center justify-center px-4 py-16 text-center text-sm text-navy-dark/60">
+    <div className="mx-auto flex min-h-full max-w-md items-center justify-center px-4 py-16 text-center text-sm text-ink-muted">
       {text}
     </div>
   );

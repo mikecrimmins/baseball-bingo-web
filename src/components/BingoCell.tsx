@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { BingoEvent } from '../lib/events';
+import { Logo } from './Logo';
 
 type Props = {
   event: BingoEvent;
@@ -11,13 +12,13 @@ type Props = {
 };
 
 export function BingoCell({ event, marked, winning, called, onToggle }: Props) {
-  const [popping, setPopping] = useState(false);
+  const [stamping, setStamping] = useState(false);
   const prevMarked = useRef(marked);
 
   useEffect(() => {
     if (marked && !prevMarked.current) {
-      setPopping(true);
-      const t = setTimeout(() => setPopping(false), 260);
+      setStamping(true);
+      const t = setTimeout(() => setStamping(false), 220);
       prevMarked.current = marked;
       return () => clearTimeout(t);
     }
@@ -27,13 +28,11 @@ export function BingoCell({ event, marked, winning, called, onToggle }: Props) {
   if (event.free) {
     return (
       <div
-        className="flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg border-2 border-gold bg-gold/20 text-navy-dark select-none"
+        className="flex aspect-square flex-col items-center justify-center rounded border-2 border-navy bg-paper-bright select-none"
         aria-label="Free space"
       >
-        <span className="font-condensed text-lg font-semibold sm:text-2xl">★</span>
-        <span className="text-[9px] font-semibold tracking-wide uppercase opacity-70 sm:text-xs">
-          Free
-        </span>
+        <Logo size={26} className="sm:hidden" />
+        <Logo size={38} className="hidden sm:block" />
       </div>
     );
   }
@@ -44,27 +43,34 @@ export function BingoCell({ event, marked, winning, called, onToggle }: Props) {
       onClick={onToggle}
       aria-pressed={marked}
       className={[
-        'relative flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg border-2 px-0.5 text-center select-none',
+        'relative flex aspect-square flex-col items-center justify-center gap-0.5 rounded border-2 bg-paper-bright px-0.5 text-center select-none',
         'transition-colors duration-150 active:scale-95',
-        popping ? 'animate-cell-pop' : '',
         winning
-          ? 'border-gold-bright bg-gold text-navy-dark ring-4 ring-gold-bright/40'
-          : marked
-            ? 'border-navy bg-navy text-white'
-            : called
-              ? 'animate-pulse-called border-gold-bright bg-gold/25 text-navy-dark ring-4 ring-gold-bright/50'
-              : 'border-navy-light/25 bg-white text-navy-dark hover:bg-navy/5',
+          ? 'border-stitch-red'
+          : called
+            ? 'animate-pulse-called border-dashed border-stitch-red'
+            : 'border-navy hover:bg-paper-edge/20',
       ].join(' ')}
     >
-      <span className="font-condensed text-sm leading-tight font-semibold sm:text-xl">
-        {event.abbr}
-      </span>
-      <span className="hidden text-[9px] leading-tight tracking-wide uppercase opacity-70 sm:block sm:text-[11px]">
+      <span className="text-sm leading-tight font-medium text-navy sm:text-xl">{event.abbr}</span>
+      <span className="hidden text-[9px] leading-tight tracking-wide text-ink-muted uppercase sm:block sm:text-[11px]">
         {event.label}
       </span>
+
+      {marked && (
+        <span
+          aria-hidden="true"
+          className={[
+            'pointer-events-none absolute inset-[10%] rounded-full border-[3px] border-stitch-red',
+            stamping ? 'animate-stamp-down' : '',
+          ].join(' ')}
+          style={{ '--stamp-rotate': '-7deg', transform: 'rotate(-7deg)' } as React.CSSProperties}
+        />
+      )}
+
       {called && !marked && (
-        <span className="absolute -top-1.5 -right-1.5 rounded-full bg-gold-bright px-1 text-[8px] font-bold text-navy-dark shadow sm:text-[9px]">
-          MARK?
+        <span className="font-varsity absolute -top-1.5 -right-1.5 rounded-[3px] bg-stitch-red px-1 text-[8px] tracking-wide text-paper-bright uppercase">
+          Mark?
         </span>
       )}
     </button>

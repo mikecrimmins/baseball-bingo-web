@@ -57,8 +57,8 @@ export function SoloGame() {
             <div className="flex items-center gap-2">
               <Logo size={44} />
               <div>
-                <p className="font-vintage text-2xl text-navy sm:text-3xl">Baseball Bingo</p>
-                <p className="text-sm text-navy-dark/60">
+                <p className="headline text-2xl text-navy sm:text-3xl">Baseball Bingo</p>
+                <p className="text-sm text-ink-muted">
                   {size}×{size} · {derived.count}/{total} marked
                 </p>
               </div>
@@ -67,20 +67,20 @@ export function SoloGame() {
               <button
                 type="button"
                 onClick={() => newCard(size)}
-                className="rounded-lg border-2 border-navy-light/30 px-3 py-2 text-sm font-semibold text-navy transition-colors hover:bg-navy/5"
+                className="font-varsity rounded-[3px] border-[1.5px] border-navy px-3 py-2 text-xs tracking-[0.1em] text-navy uppercase transition-colors hover:bg-navy/5"
               >
                 New card
               </button>
               <Link
                 to="/glossary"
-                className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
+                className="font-varsity rounded-[3px] px-3 py-2 text-xs tracking-[0.1em] text-ink-muted uppercase transition-colors hover:bg-navy/5"
               >
                 Glossary
               </Link>
               <button
                 type="button"
                 onClick={() => navigate('/')}
-                className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
+                className="font-varsity rounded-[3px] px-3 py-2 text-xs tracking-[0.1em] text-ink-muted uppercase transition-colors hover:bg-navy/5"
               >
                 Change size
               </button>
@@ -112,7 +112,7 @@ export function SoloGame() {
             <button
               type="button"
               onClick={() => setPickingGame(true)}
-              className="w-full rounded-xl border-2 border-dashed border-navy-light/30 px-4 py-3 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
+              className="font-varsity w-full rounded-[3px] border-2 border-dashed border-stitch-red px-4 py-3 text-xs tracking-[0.1em] text-stitch-red uppercase transition-colors hover:bg-stitch-red/5"
             >
               Follow a live game
             </button>

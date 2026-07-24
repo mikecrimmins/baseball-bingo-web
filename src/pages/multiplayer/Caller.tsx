@@ -6,6 +6,7 @@ import { ALL_EVENTS } from '../../lib/events';
 import { GameLayout } from '../../components/GameLayout';
 import { RosterPanel } from '../../components/RosterPanel';
 import { AnnouncementBanner } from '../../components/AnnouncementBanner';
+import { StampBadge } from '../../components/StampBadge';
 import { Logo } from '../../components/Logo';
 
 export function Caller() {
@@ -39,12 +40,12 @@ function CallerReady({ code }: { code: string }) {
     <>
       <GameLayout
         header={
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 rounded border-[1.5px] border-navy bg-paper-edge/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2">
               <Logo size={40} />
               <div>
-                <p className="font-vintage text-2xl text-navy sm:text-3xl">Calling</p>
-                <p className="text-sm text-navy-dark/60">
+                <p className="headline text-2xl text-navy sm:text-3xl">Calling</p>
+                <p className="font-varsity text-xs tracking-[0.1em] text-ink-muted uppercase">
                   Game {code} · tap a play as it happens
                 </p>
               </div>
@@ -52,7 +53,7 @@ function CallerReady({ code }: { code: string }) {
             <div className="flex gap-2">
               <Link
                 to="/glossary"
-                className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
+                className="font-varsity rounded-[3px] px-3 py-2 text-xs tracking-[0.1em] text-ink-muted uppercase transition-colors hover:bg-paper-bright/60"
               >
                 Glossary
               </Link>
@@ -62,7 +63,7 @@ function CallerReady({ code }: { code: string }) {
                   leave();
                   navigate('/');
                 }}
-                className="rounded-lg px-3 py-2 text-sm font-semibold text-navy-dark/60 transition-colors hover:bg-navy/5"
+                className="font-varsity rounded-[3px] px-3 py-2 text-xs tracking-[0.1em] text-ink-muted uppercase transition-colors hover:bg-paper-bright/60"
               >
                 Leave game
               </button>
@@ -70,36 +71,42 @@ function CallerReady({ code }: { code: string }) {
           </div>
         }
         main={
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {ALL_EVENTS.map((event) => {
+          <ol className="flex flex-col rounded border-[1.5px] border-navy bg-paper-bright">
+            {ALL_EVENTS.map((event, i) => {
               const isCalled = called.has(event.abbr);
               const autoDetected = feed.detectedAbbrs.has(event.abbr);
               return (
-                <button
+                <li
                   key={event.abbr}
-                  type="button"
-                  onClick={() => callEvent(event.abbr)}
-                  aria-pressed={isCalled}
-                  className={[
-                    'relative flex flex-col items-start gap-0.5 rounded-lg border-2 px-3 py-2.5 text-left transition-colors',
-                    isCalled
-                      ? 'border-gold-bright bg-gold text-navy-dark'
-                      : autoDetected
-                        ? 'border-navy-light/40 border-dashed bg-navy/5 text-navy-dark'
-                        : 'border-navy-light/25 bg-white text-navy-dark hover:bg-navy/5',
-                  ].join(' ')}
+                  className={i > 0 ? 'border-t border-dashed border-paper-edge' : ''}
                 >
-                  <span className="font-condensed text-sm font-semibold">{event.abbr}</span>
-                  <span className="text-xs opacity-70">{event.label}</span>
-                  {!isCalled && autoDetected && (
-                    <span className="absolute top-1 right-1 text-[8px] font-bold tracking-wide text-navy-dark/50 uppercase">
-                      auto
+                  <button
+                    type="button"
+                    onClick={() => callEvent(event.abbr)}
+                    aria-pressed={isCalled}
+                    className="flex w-full items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-paper"
+                  >
+                    <span className="font-varsity w-7 shrink-0 text-right text-xs text-ink-faint">
+                      {i + 1}
                     </span>
-                  )}
-                </button>
+                    <span className="flex flex-1 items-baseline gap-2">
+                      <span className="text-sm font-semibold text-navy">{event.abbr}</span>
+                      <span className="text-xs text-ink-muted">{event.label}</span>
+                    </span>
+                    {isCalled ? (
+                      <StampBadge label="Called" />
+                    ) : (
+                      autoDetected && (
+                        <span className="font-varsity text-[9px] tracking-wide text-ink-faint uppercase">
+                          Auto
+                        </span>
+                      )
+                    )}
+                  </button>
+                </li>
               );
             })}
-          </div>
+          </ol>
         }
         sidebar={
           <div className="flex flex-col gap-4">
@@ -115,7 +122,7 @@ function CallerReady({ code }: { code: string }) {
 
 function CenteredNote({ text }: { text: string }) {
   return (
-    <div className="mx-auto flex min-h-full max-w-md items-center justify-center px-4 py-16 text-center text-sm text-navy-dark/60">
+    <div className="mx-auto flex min-h-full max-w-md items-center justify-center px-4 py-16 text-center text-sm text-ink-muted">
       {text}
     </div>
   );

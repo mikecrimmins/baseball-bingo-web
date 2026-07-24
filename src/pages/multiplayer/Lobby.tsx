@@ -3,6 +3,8 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useRoom } from '../../lib/useRoom';
 import { useRoomSession } from '../../lib/useRoomSession';
 import { Logo } from '../../components/Logo';
+import { Ticket } from '../../components/Ticket';
+import { StampBadge } from '../../components/StampBadge';
 
 export function Lobby() {
   const { code } = useParams<{ code: string }>();
@@ -54,64 +56,58 @@ function LobbyReady({ code }: { code: string }) {
     <div className="mx-auto flex min-h-full max-w-md flex-col gap-8 px-4 py-16">
       <div className="flex items-center justify-center gap-3 text-center">
         <Logo size={48} />
-        <p className="font-vintage text-3xl text-navy">Lobby</p>
+        <p className="headline text-3xl text-navy">Lobby</p>
       </div>
 
-      <div className="flex flex-col items-center gap-2 rounded-xl border-2 border-navy-light/25 bg-white p-5 text-center">
-        <span className="text-xs font-semibold tracking-wide text-navy-dark/60 uppercase">
-          Game code
-        </span>
-        <span className="font-condensed text-4xl tracking-[0.3em] text-navy">{code}</span>
-        <button
-          type="button"
-          onClick={copyLink}
-          className="mt-1 rounded-lg border-2 border-navy-light/25 px-3 py-1.5 text-xs font-semibold text-navy-dark transition-colors hover:bg-navy/5"
-        >
-          {copied ? 'Link copied!' : 'Copy invite link'}
-        </button>
-      </div>
+      <Ticket stubLabel="Admit one">
+        <div className="flex flex-col items-center gap-2 text-center">
+          <span className="font-varsity text-xs tracking-[0.15em] text-stitch-red uppercase">
+            Game code
+          </span>
+          <span className="headline text-4xl tracking-[0.25em] text-navy">{code}</span>
+          <button
+            type="button"
+            onClick={copyLink}
+            className="font-varsity mt-1 rounded-[3px] border-2 border-dashed border-stitch-red px-3 py-1.5 text-xs tracking-[0.1em] text-stitch-red uppercase transition-colors hover:bg-stitch-red/5"
+          >
+            {copied ? 'Link copied!' : 'Copy invite link'}
+          </button>
+        </div>
+      </Ticket>
 
       <div className="flex flex-col gap-2">
-        <span className="text-sm font-semibold text-navy-dark/80">
+        <span className="font-varsity text-xs tracking-[0.12em] text-ink-muted uppercase">
           Players ({players.length})
         </span>
         <ul className="flex flex-col gap-1.5">
           {players.map((p) => (
             <li
               key={p.id}
-              className="flex items-center justify-between rounded-lg border-2 border-navy-light/20 bg-white px-3 py-2 text-sm"
+              className="flex items-center justify-between rounded-[3px] border-[1.5px] border-paper-edge bg-paper-bright px-3 py-2 text-sm"
             >
-              <span className="font-medium text-navy-dark">{p.name}</span>
-              <span className="flex gap-1.5">
-                {p.id === room.hostId && (
-                  <span className="rounded bg-navy px-1.5 py-0.5 text-[10px] font-bold text-white uppercase">
-                    Host
-                  </span>
-                )}
-                {p.isCaller && (
-                  <span className="rounded bg-gold px-1.5 py-0.5 text-[10px] font-bold text-navy-dark uppercase">
-                    Caller
-                  </span>
-                )}
+              <span className="font-medium text-navy">{p.name}</span>
+              <span className="flex gap-2">
+                {p.id === room.hostId && <StampBadge label="Host" />}
+                {p.isCaller && <StampBadge label="Caller" />}
               </span>
             </li>
           ))}
         </ul>
       </div>
 
-      {error && <p className="text-sm font-medium text-red-700">{error}</p>}
+      {error && <p className="text-sm font-medium text-stitch-red">{error}</p>}
 
       {isHost ? (
         <button
           type="button"
           onClick={handleStart}
           disabled={starting}
-          className="rounded-lg bg-navy px-4 py-3 font-semibold text-white transition-colors hover:bg-navy-light disabled:opacity-60"
+          className="font-varsity rounded-[3px] bg-navy px-4 py-3 text-xs tracking-[0.12em] text-paper-bright uppercase transition-colors hover:bg-navy/90 disabled:opacity-60"
         >
           {starting ? 'Starting…' : 'Start game'}
         </button>
       ) : (
-        <p className="text-center text-sm text-navy-dark/60">Waiting for the host to start…</p>
+        <p className="text-center text-sm text-ink-muted">Waiting for the host to start…</p>
       )}
 
       <button
@@ -120,7 +116,7 @@ function LobbyReady({ code }: { code: string }) {
           leave();
           navigate('/');
         }}
-        className="text-center text-sm text-navy-dark/60 hover:underline"
+        className="text-center text-sm text-ink-faint underline decoration-dotted underline-offset-4 hover:text-navy"
       >
         Leave game
       </button>
@@ -131,13 +127,13 @@ function LobbyReady({ code }: { code: string }) {
 function RoomNotFound() {
   return (
     <div className="mx-auto flex min-h-full max-w-md flex-col items-center justify-center gap-4 px-4 py-16 text-center">
-      <p className="font-vintage text-2xl text-navy">Game not found</p>
-      <p className="text-sm text-navy-dark/70">
+      <p className="headline text-2xl text-navy">Game not found</p>
+      <p className="text-sm text-ink-muted">
         That code doesn't match a game — it may have expired or been typed wrong.
       </p>
       <Link
         to="/join"
-        className="rounded-lg border-2 border-navy px-4 py-2.5 text-sm font-semibold text-navy hover:bg-navy/10"
+        className="font-varsity rounded-[3px] border-[1.5px] border-navy px-4 py-2.5 text-xs tracking-[0.12em] text-navy uppercase hover:bg-navy/5"
       >
         Try another code
       </Link>
@@ -147,7 +143,7 @@ function RoomNotFound() {
 
 function CenteredNote({ text }: { text: string }) {
   return (
-    <div className="mx-auto flex min-h-full max-w-md items-center justify-center px-4 py-16 text-center text-sm text-navy-dark/60">
+    <div className="mx-auto flex min-h-full max-w-md items-center justify-center px-4 py-16 text-center text-sm text-ink-muted">
       {text}
     </div>
   );

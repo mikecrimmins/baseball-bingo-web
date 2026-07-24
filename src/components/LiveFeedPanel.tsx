@@ -10,35 +10,35 @@ type Props = {
 /** Sidebar panel showing score/inning/recent plays for an attached live game. */
 export function LiveFeedPanel({ label, feed, onDetach }: Props) {
   return (
-    <div className="flex flex-col gap-2 rounded-xl border-2 border-navy-light/20 bg-white p-4">
+    <div className="flex flex-col gap-2 rounded border-[1.5px] border-navy bg-paper-bright p-4">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold tracking-wide text-navy-dark/60 uppercase">
+        <span className="font-varsity text-xs tracking-[0.12em] text-ink-muted uppercase">
           Live feed
         </span>
         {onDetach && (
           <button
             type="button"
             onClick={onDetach}
-            className="text-xs font-semibold text-navy-dark/50 hover:underline"
+            className="text-xs font-semibold text-ink-faint hover:underline"
           >
             Stop following
           </button>
         )}
       </div>
 
-      <p className="text-sm font-semibold text-navy-dark">{label}</p>
+      <p className="text-sm font-semibold text-navy">{label}</p>
 
       {!feed.available ? (
-        <p className="text-sm text-navy-dark/60">
+        <p className="text-sm text-ink-muted">
           {feed.loading ? 'Connecting…' : "Feed's unavailable right now — mark manually for now."}
         </p>
       ) : (
         <>
-          <div className="flex items-center justify-between rounded-lg bg-navy/5 px-3 py-2">
-            <span className="font-condensed text-lg text-navy">
+          <div className="flex items-center justify-between rounded-[3px] bg-paper px-3 py-2">
+            <span className="text-lg font-semibold text-navy">
               {feed.awayScore ?? 0}–{feed.homeScore ?? 0}
             </span>
-            <span className="text-xs text-navy-dark/60">
+            <span className="text-xs text-ink-muted">
               {feed.isFinal
                 ? 'Final'
                 : feed.inning
@@ -50,7 +50,7 @@ export function LiveFeedPanel({ label, feed, onDetach }: Props) {
           {feed.recentPlays.length > 0 && (
             <ul className="flex flex-col gap-1.5">
               {feed.recentPlays.map((play, i) => (
-                <li key={i} className="text-xs text-navy-dark/70">
+                <li key={i} className="text-xs text-ink-muted">
                   {play}
                 </li>
               ))}
