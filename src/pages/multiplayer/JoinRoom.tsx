@@ -15,9 +15,14 @@ export function JoinRoom() {
   const [code, setCode] = useState((codeParam ?? '').toUpperCase().slice(0, 4));
   const [name, setName] = useState(displayName);
   const [tearing, setTearing] = useState(false);
+  const [nameError, setNameError] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!name.trim()) {
+      setNameError(true);
+      return;
+    }
     setDisplayName(name);
     try {
       await join(code, name);
@@ -61,33 +66,71 @@ export function JoinRoom() {
       <form onSubmit={submit} className="flex flex-col gap-6">
         <Ticket className={tearing ? 'animate-tear-stub' : ''}>
           <div className="flex flex-col gap-4">
-            <div className="font-varsity flex justify-between text-[10px] tracking-[0.15em] text-ink-faint uppercase">
-              <span>Section</span>
-              <span>Row</span>
-              <span>Seat</span>
+            <span className="font-varsity text-center text-[10px] tracking-[0.15em] text-ink-faint uppercase">
+              Game code
+            </span>
+            <div className="relative">
+              <input
+                required
+                autoFocus
+                autoComplete="off"
+                autoCapitalize="characters"
+                inputMode="text"
+                pattern="[A-Za-z]{4}"
+                title="4 letters"
+                maxLength={4}
+                value={code}
+                onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z]/g, ''))}
+                aria-label="4-letter game code"
+                className="absolute inset-0 h-full w-full cursor-text opacity-0"
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none flex justify-center gap-2 sm:gap-3"
+              >
+                {Array.from({ length: 4 }).map((_, i) => {
+                  const char = code[i];
+                  const isActive = i === code.length;
+                  return (
+                    <div
+                      key={i}
+                      className={[
+                        'headline flex h-16 w-14 items-center justify-center rounded border-[1.5px] bg-paper text-3xl text-navy sm:h-20 sm:w-16 sm:text-4xl',
+                        isActive ? 'border-stitch-red' : 'border-paper-edge',
+                      ].join(' ')}
+                    >
+                      {char ?? (
+                        isActive && (
+                          <span className="h-8 w-[2px] animate-pulse bg-stitch-red motion-reduce:animate-none sm:h-10" />
+                        )
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <input
-              required
-              pattern="[A-Za-z]{4}"
-              title="4 letters"
-              maxLength={4}
-              value={code}
-              onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z]/g, ''))}
-              placeholder="ABCD"
-              className="headline w-full border-0 bg-transparent text-center text-4xl tracking-[0.3em] text-navy outline-none placeholder:text-paper-edge"
-            />
+            <p className="text-center text-xs text-ink-faint">Enter the 4-letter game code.</p>
             <label className="flex flex-col gap-1.5">
               <span className="font-varsity text-xs tracking-[0.12em] text-ink-muted uppercase">
                 Your name
               </span>
               <input
-                required
                 maxLength={24}
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (nameError) setNameError(false);
+                }}
                 placeholder="Player"
-                className="rounded-[3px] border-[1.5px] border-paper-edge bg-paper px-3 py-2.5 text-navy outline-none focus:border-stitch-red"
+                aria-invalid={nameError}
+                className={[
+                  'rounded-[3px] border-[1.5px] bg-paper px-3 py-2.5 text-navy outline-none focus:border-stitch-red',
+                  nameError ? 'border-stitch-red' : 'border-paper-edge',
+                ].join(' ')}
               />
+              {nameError && (
+                <span className="text-xs font-medium text-stitch-red">Please enter your name.</span>
+              )}
             </label>
           </div>
         </Ticket>
@@ -97,7 +140,7 @@ export function JoinRoom() {
         <button
           type="submit"
           disabled={connecting || code.length !== 4}
-          className="font-varsity rounded-[3px] bg-navy px-4 py-3 text-xs tracking-[0.12em] text-paper-bright uppercase transition-colors hover:bg-navy/90 disabled:opacity-60"
+          className="font-varsity rounded-[3px] bg-navy px-4 py-3 text-xs tracking-[0.12em] text-paper-bright uppercase transition-[colors,transform] duration-100 hover:bg-navy/90 active:scale-[0.98] active:bg-navy/80 disabled:opacity-60 disabled:active:scale-100"
         >
           {connecting ? 'Joining…' : 'Join game'}
         </button>

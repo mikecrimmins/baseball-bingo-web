@@ -14,9 +14,14 @@ export function HostRoom() {
   const [name, setName] = useState(displayName);
   const [size, setSize] = useState<CardSize>(5);
   const [callerMode, setCallerMode] = useState(false);
+  const [nameError, setNameError] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!name.trim()) {
+      setNameError(true);
+      return;
+    }
     setDisplayName(name);
     const code = await host(name, callerMode, size);
     navigate(`/room/${code}/lobby`);
@@ -42,13 +47,20 @@ export function HostRoom() {
             Your name
           </span>
           <input
-            required
             maxLength={24}
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+              if (nameError) setNameError(false);
+            }}
             placeholder="Player"
-            className="rounded-[3px] border-[1.5px] border-paper-edge bg-paper px-3 py-2.5 text-navy outline-none focus:border-stitch-red"
+            aria-invalid={nameError}
+            className={[
+              'rounded-[3px] border-[1.5px] bg-paper px-3 py-2.5 text-navy outline-none focus:border-stitch-red',
+              nameError ? 'border-stitch-red' : 'border-paper-edge',
+            ].join(' ')}
           />
+          {nameError && <span className="text-xs font-medium text-stitch-red">Please enter your name.</span>}
         </label>
 
         <div className="flex flex-col gap-1.5">
@@ -65,7 +77,7 @@ export function HostRoom() {
                   'rounded-[3px] border-[1.5px] px-3 py-2.5 text-sm font-medium transition-colors',
                   size === s
                     ? 'border-navy bg-navy text-paper-bright'
-                    : 'border-paper-edge bg-paper text-navy hover:bg-paper-edge/30',
+                    : 'border-paper-edge bg-paper text-navy hover:bg-paper-edge/30 active:bg-paper-edge/50',
                 ].join(' ')}
               >
                 {s}×{s} {s === 3 ? '— quick' : '— full'}
@@ -93,7 +105,7 @@ export function HostRoom() {
         <button
           type="submit"
           disabled={connecting}
-          className="font-varsity rounded-[3px] bg-navy px-4 py-3 text-xs tracking-[0.12em] text-paper-bright uppercase transition-colors hover:bg-navy/90 disabled:opacity-60"
+          className="font-varsity rounded-[3px] bg-navy px-4 py-3 text-xs tracking-[0.12em] text-paper-bright uppercase transition-[colors,transform] duration-100 hover:bg-navy/90 active:scale-[0.98] active:bg-navy/80 disabled:opacity-60 disabled:active:scale-100"
         >
           {connecting ? 'Creating game…' : 'Create game'}
         </button>

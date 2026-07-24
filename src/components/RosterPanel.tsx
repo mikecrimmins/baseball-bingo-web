@@ -16,11 +16,12 @@ export function RosterPanel({ players, meId, hostId, size }: Props) {
       </span>
       <ul className="flex flex-col gap-1.5">
         {players.map((p) => {
+          const linesNeed = closestLineNeed(p.marked, size);
           const status = p.hasBlackout
             ? 'Blackout!'
             : p.hasBingo
               ? 'Bingo!'
-              : `needs ${closestLineNeed(p.marked, size)}`;
+              : `${linesNeed} to win`;
           const won = p.hasBingo || p.hasBlackout;
           return (
             <li key={p.id} className="flex items-center justify-between gap-2 text-sm">

@@ -9,9 +9,11 @@ type Props = {
   /** Multiplayer only: the caller has called this event but it isn't marked yet. */
   called?: boolean;
   onToggle: () => void;
+  /** Reveal this cell's plain-English definition (see BingoCard's info sheet). */
+  onInfo: () => void;
 };
 
-export function BingoCell({ event, marked, winning, called, onToggle }: Props) {
+export function BingoCell({ event, marked, winning, called, onToggle, onInfo }: Props) {
   const [stamping, setStamping] = useState(false);
   const prevMarked = useRef(marked);
 
@@ -38,12 +40,20 @@ export function BingoCell({ event, marked, winning, called, onToggle }: Props) {
   }
 
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       onClick={onToggle}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onToggle();
+        }
+      }}
       aria-pressed={marked}
+      aria-label={`${event.abbr} — ${event.label}`}
       className={[
-        'relative flex aspect-square flex-col items-center justify-center gap-0.5 rounded border-2 bg-paper-bright px-0.5 text-center select-none',
+        'relative flex aspect-square cursor-pointer flex-col items-center justify-center gap-0.5 rounded border-2 bg-paper-bright px-0.5 text-center select-none',
         'transition-colors duration-150 active:scale-95',
         winning
           ? 'border-stitch-red'
@@ -73,6 +83,20 @@ export function BingoCell({ event, marked, winning, called, onToggle }: Props) {
           Mark?
         </span>
       )}
-    </button>
+
+      {event.description && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onInfo();
+          }}
+          aria-label={`What does ${event.abbr} mean?`}
+          className="font-varsity absolute -top-1.5 -left-1.5 flex h-4 w-4 items-center justify-center rounded-full border border-navy bg-paper-bright text-[9px] leading-none text-ink-muted hover:bg-paper-edge/40 active:bg-paper-edge/60"
+        >
+          ?
+        </button>
+      )}
+    </div>
   );
 }

@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+/* Redefine the built-in `hover:` variant to only apply on devices that can
+   actually hover (mouse/trackpad). Without this, touchscreens (this app's
+   primary device — it's a phone-in-hand second-screen experience) hit the
+   classic WebKit/Chrome quirk where a first tap only fires `:hover` and a
+   second, separate tap is needed to fire `click` — every `hover:` utility
+   in the app was silently requiring a double-tap on primary buttons. */
+@custom-variant hover {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
 @theme {
   --font-display: "Ultra", "Georgia", serif;
   --font-varsity: "Graduate", system-ui, sans-serif;
@@ -111,11 +125,26 @@
     animation: tear-stub 380ms ease-in forwards;
   }
 
+  @keyframes sheet-up {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  .animate-sheet-up {
+    animation: sheet-up 180ms ease-out;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .animate-pulse-called,
     .animate-stamp-down,
     .animate-banner-in,
-    .animate-tear-stub {
+    .animate-tear-stub,
+    .animate-sheet-up {
       animation: none;
     }
   }

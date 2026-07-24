@@ -68,7 +68,7 @@ function LobbyReady({ code }: { code: string }) {
           <button
             type="button"
             onClick={copyLink}
-            className="font-varsity mt-1 rounded-[3px] border-2 border-dashed border-stitch-red px-3 py-1.5 text-xs tracking-[0.1em] text-stitch-red uppercase transition-colors hover:bg-stitch-red/5"
+            className="font-varsity mt-1 rounded-[3px] border-2 border-dashed border-stitch-red px-3 py-1.5 text-xs tracking-[0.1em] text-stitch-red uppercase transition-[colors,transform] duration-100 hover:bg-stitch-red/5 active:scale-[0.98] active:bg-stitch-red/15"
           >
             {copied ? 'Link copied!' : 'Copy invite link'}
           </button>
@@ -98,14 +98,21 @@ function LobbyReady({ code }: { code: string }) {
       {error && <p className="text-sm font-medium text-stitch-red">{error}</p>}
 
       {isHost ? (
-        <button
-          type="button"
-          onClick={handleStart}
-          disabled={starting}
-          className="font-varsity rounded-[3px] bg-navy px-4 py-3 text-xs tracking-[0.12em] text-paper-bright uppercase transition-colors hover:bg-navy/90 disabled:opacity-60"
-        >
-          {starting ? 'Starting…' : 'Start game'}
-        </button>
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={handleStart}
+            disabled={starting}
+            className="font-varsity rounded-[3px] bg-navy px-4 py-3 text-xs tracking-[0.12em] text-paper-bright uppercase transition-[colors,transform] duration-100 hover:bg-navy/90 active:scale-[0.98] active:bg-navy/80 disabled:opacity-60 disabled:active:scale-100"
+          >
+            {starting ? 'Starting…' : 'Start game'}
+          </button>
+          {players.length < 2 && (
+            <p className="text-center text-xs text-ink-faint">
+              No minimum — you can start solo or wait for friends to join.
+            </p>
+          )}
+        </div>
       ) : (
         <p className="text-center text-sm text-ink-muted">Waiting for the host to start…</p>
       )}

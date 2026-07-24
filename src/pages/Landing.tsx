@@ -74,14 +74,14 @@ export function Landing() {
         <button
           type="button"
           onClick={() => navigate('/host')}
-          className="font-varsity rounded-[3px] bg-navy px-5 py-3.5 text-xs tracking-[0.12em] text-paper-bright uppercase transition-colors hover:bg-navy/90"
+          className="font-varsity rounded-[3px] bg-navy px-5 py-3.5 text-xs tracking-[0.12em] text-paper-bright uppercase transition-[colors,transform] duration-100 hover:bg-navy/90 active:scale-[0.98] active:bg-navy/80"
         >
           Play ball — host a game
         </button>
         <button
           type="button"
           onClick={() => navigate('/join')}
-          className="font-varsity rounded-[3px] border-2 border-dashed border-stitch-red px-5 py-3.5 text-xs tracking-[0.12em] text-stitch-red uppercase transition-colors hover:bg-stitch-red/5"
+          className="font-varsity rounded-[3px] border-2 border-dashed border-stitch-red px-5 py-3.5 text-xs tracking-[0.12em] text-stitch-red uppercase transition-[colors,transform] duration-100 hover:bg-stitch-red/5 active:scale-[0.98] active:bg-stitch-red/15"
         >
           Join a game
         </button>

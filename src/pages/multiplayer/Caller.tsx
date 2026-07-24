@@ -84,7 +84,7 @@ function CallerReady({ code }: { code: string }) {
                     type="button"
                     onClick={() => callEvent(event.abbr)}
                     aria-pressed={isCalled}
-                    className="flex w-full items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-paper"
+                    className="flex w-full items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-paper active:bg-paper-edge/40"
                   >
                     <span className="font-varsity w-7 shrink-0 text-right text-xs text-ink-faint">
                       {i + 1}
